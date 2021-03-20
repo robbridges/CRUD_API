@@ -19,5 +19,6 @@ module.exports =(sequelize, DataTypes) => {
       fieldName: 'userId',
     });
   }
+  
   return Course;
 }
