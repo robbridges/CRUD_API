@@ -16,7 +16,7 @@ module.exports =(sequelize, DataTypes) => {
   });
   Course.associate = (models) => {
     Course.belongsTo(models.User, {
-        fieldName: 'userId',
+      fieldName: 'userId',
     });
   }
   return Course;
