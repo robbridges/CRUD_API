@@ -20,8 +20,8 @@ router.get('/courses', asyncHandler(async (req, res) => {
 // adds user to the database
 router.post('/users', asyncHandler(async (req, res) => {
   try {
-  let user = await User.create(req.body);
-  res.json(user);
+    let user = await User.create(req.body);
+    res.json(user);
   } catch (error) {
     res.json(error);
   }
