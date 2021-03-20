@@ -17,7 +17,7 @@ exports.authenticateUser = async (req, res, next) => {
       if (authenticated) {
         console.log(`The user ${user.emailAddress} is authenticated`);
         
-        req.currentUser = user; 
+        req.currentUser = userd; 
       } else {
         message = `Authenticated failed for ${user.emailAddress}`;
       }

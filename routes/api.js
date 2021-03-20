@@ -5,13 +5,10 @@ const {asyncHandler} = require('../middleware/asyncHandler');
 const { authenticateUser } = require('../middleware/user-auth');
 
 // should return authenticated user
-router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
-  const user = req.currentUser;
+router.get('/users',  asyncHandler(async (req, res) => {
+  const users = await User.findAll();
   
-  res.json({
-    emailAddress: user.emailAddress,
-    name: user.firstName
-  })
+  res.json(users);
 }));
 // returns all courses
 router.get('/courses', asyncHandler(async (req, res) => {
@@ -22,13 +19,8 @@ router.get('/courses', asyncHandler(async (req, res) => {
 }));
 // adds user to the database
 router.post('/users', asyncHandler(async (req, res) => {
-  try {
-    await User.create(req.body);
-    res.location('/').status(201).end()
-  } catch (error) {
-    console.log(error);
-
-  }
+  let user = await User.create(req.body);
+  res.json(user);
 }));
 
 
