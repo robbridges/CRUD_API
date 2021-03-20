@@ -18,11 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     emailAddress: DataTypes.STRING,
     password: DataTypes.STRING,
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    }
   }, {
     sequelize,
     modelName: 'User',
