@@ -23,7 +23,7 @@ exports.authenticateUser = async (req, res, next) => {
         message = `Authenticated failed for ${user.emailAddress}`;
       }
     } else {
-      message = `We found no such user in the database ${user.emailAddress}`;
+      message = `We found no such user in the database ${credentials.name}`;
     }
 
   } else {

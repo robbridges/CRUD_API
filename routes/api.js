@@ -22,6 +22,12 @@ router.get('/users', authenticateUser,  asyncHandler(async (req, res) => {
 router.get('/courses', asyncHandler(async (req, res) => {
 
     const courses = await Course.findAll({
+      include: [{
+        model: User,
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        }
+      }],
       attributes: {
         exclude: ['createdAt', 'updatedAt'],
       },
@@ -34,7 +40,7 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
     include: [{
         model: User,
         attributes: {
-            exclude: ['password', 'createdAt', 'updatedAt']
+            exclude: ['password', 'createdAt', 'updatedAt'],
         },
     }],
     attributes: {
@@ -62,7 +68,8 @@ router.post('/users', asyncHandler(async (req, res) => {
       const errors = error.errors.map(err => err.message);
       res.status(400).json({errors});
     } else {
-    res.json(error.message);
+      const errors = error.errors.map(err => err.message);  
+      res.json(errors);
     }
     
   }
@@ -73,7 +80,8 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     await Course.create(req.body);
     res.status(201).location('/').json();
   } catch (error) {
-    res.status(400).json(error.message);
+    const errors = error.errors.map(err => err.message);
+    res.status(400).json(errors);
     
   }
 }));
@@ -92,7 +100,8 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
       res.status(404).json({message: 'Course not found'});
     } 
   } catch (error) {
-    res.status(400).json(error.message);
+    const errors = error.errors.map(err => err.message);
+    res.status(400).json(errors);
   } 
 }));
 // deletes a course, but only if the user who created the course is the currently authorized user, otherwise returns a 403 error
