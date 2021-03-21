@@ -45,8 +45,8 @@ router.post('/users', asyncHandler(async (req, res) => {
     await User.create(req.body);
     res.status(201).location('/').json();
   } catch (error) {
-    res.json(error);
-    console.log(req.body);
+    res.status(400).json(error.message);
+    
   }
 }));
 
@@ -55,7 +55,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     await Course.create(req.body);
     res.status(201).location('/').json();
   } catch (error) {
-    res.json(error);
+    res.status(400).json(error.message);
     
   }
 }));
@@ -70,7 +70,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
       res.status(404).json({message: 'Course not found'});
     } 
   } catch (error) {
-    res.json(error);
+    res.status(400).json(error.message);
   } 
 }));
 
@@ -84,7 +84,7 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) =>
       res.status(404).json({message: 'Course not found'});
     } 
   } catch (error) {
-    res.json(error);
+    res.json(error.message);
   } 
 }));
 
