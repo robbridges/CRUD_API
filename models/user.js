@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Please provide a valid email address',
         },
+        isEmail: {
+          msg: 'Please provide a properly formatted email address ex: test@test.com'
+        },
       },
     },
     password: {
@@ -55,9 +58,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: {
           msg: 'Please provide a valid email address',
         },
-        isEmail: {
-          msg: 'Please provide a properly formatted email address ex: test@test.com'
-        },
+        
       },
     } 
   }, {
@@ -69,7 +70,6 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Course, {
       foreignKey: {
         fieldName: 'userId',
-        allowNull:false,
       }
     });
   }

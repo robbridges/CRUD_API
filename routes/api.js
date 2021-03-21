@@ -21,13 +21,26 @@ router.get('/users', authenticateUser,  asyncHandler(async (req, res) => {
 // returns all courses
 router.get('/courses', asyncHandler(async (req, res) => {
 
-    const courses = await Course.findAll({  
+    const courses = await Course.findAll({
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
       });
   res.json(courses);
 }));
 
 router.get('/courses/:id', asyncHandler(async (req, res) => {
-  const course = await Course.findByPk(req.params.id);
+  const course = await Course.findByPk(req.params.id, {
+    include: [{
+        model: User,
+        attributes: {
+            exclude: ['password', 'createdAt', 'updatedAt']
+        },
+    }],
+    attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+    },
+   });
   if (course) {
     res.status(200).json(course);
   } else {
@@ -45,7 +58,12 @@ router.post('/users', asyncHandler(async (req, res) => {
     await User.create(req.body);
     res.status(201).location('/').json();
   } catch (error) {
-    res.status(400).json(error.message);
+    if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+      const errors = error.errors.map(err => err.message);
+      res.status(400).json({errors});
+    } else {
+    res.json(error.message);
+    }
     
   }
 }));
@@ -64,8 +82,12 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id);
   try {
     if ( course ) {
-      await course.update(req.body);
-      res.status(204).send();
+      if(course.userId === req.currentUser) {
+        await course.update(req.body);
+        res.status(204).send();
+      } else {
+        res.status(403).send({ msg: 'Only the owner can update this course.'});
+      }
     } else {
       res.status(404).json({message: 'Course not found'});
     } 
@@ -78,8 +100,12 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) =>
   const course = await Course.findByPk(req.params.id);
   try {
     if ( course ) {
-      await course.destroy();
-      res.status(204).send();
+      if(course.userId === req.currentUser) {
+        await course.destroy();
+        res.status(204).send();
+      } else {
+        res.status(403).send({ msg: 'Only the course owner can delete a course.'});
+      }
     } else {
       res.status(404).json({message: 'Course not found'});
     } 
