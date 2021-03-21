@@ -4,9 +4,10 @@ const {User, Course} = require('../models');
 const {asyncHandler} = require('../middleware/asyncHandler');
 const { authenticateUser } = require('../middleware/user-auth');
 
+
 // should return authenticated user
 router.get('/users', authenticateUser,  asyncHandler(async (req, res) => {
-  const user = req.currentUser;
+  const user = await User.findByPk(req.currentUser);
 
   
   res.json({
