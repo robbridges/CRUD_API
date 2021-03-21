@@ -3,7 +3,7 @@ const router = express.Router();
 const {User, Course} = require('../models');
 const {asyncHandler} = require('../middleware/asyncHandler');
 const { authenticateUser } = require('../middleware/user-auth');
-const e = require('express');
+
 
 
 // should return authenticated user
@@ -28,7 +28,7 @@ router.get('/courses', asyncHandler(async (req, res) => {
       });
   res.json(courses);
 }));
-
+// gets a listing of the course and the description, as well as information on the user that owns the course
 router.get('/courses/:id', asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id, {
     include: [{
@@ -67,7 +67,7 @@ router.post('/users', asyncHandler(async (req, res) => {
     
   }
 }));
-
+// creates a course, user must be signedf in do it
 router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
   try {
     await Course.create(req.body);
@@ -77,7 +77,7 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     
   }
 }));
-
+// updates a course, but only if the owner of the course is the currently assigned user, otherwise returns unauthorized
 router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id);
   try {
@@ -95,7 +95,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
     res.status(400).json(error.message);
   } 
 }));
-
+// deletes a course, but only if the user who created the course is the currently authorized user, otherwise returns a 403 error
 router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id);
   try {

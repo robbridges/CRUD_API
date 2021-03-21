@@ -1,4 +1,5 @@
 'use strict';
+// user database model, all attributes should be validated
 const { Model } = require('sequelize');
 const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
@@ -66,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
   });
 
+  // many to one aassociation between a user and the course
   User.associate = (models) => {
     User.hasMany(models.Course, {
       foreignKey: {

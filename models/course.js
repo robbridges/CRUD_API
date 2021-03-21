@@ -1,4 +1,6 @@
 'use strict';
+
+// Course database file, only the title and description attributes are required and validated. 
 const {
   Model
 } = require('sequelize');
@@ -36,6 +38,8 @@ module.exports =(sequelize, DataTypes) => {
     sequelize,
     modelName: 'Course',
   });
+
+  // one to one association between course and user, only one user should own a course.  
   Course.associate = (models) => {
     Course.belongsTo(models.User, {
       foreignKey: {

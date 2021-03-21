@@ -16,10 +16,10 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
-
+// this is what gives our requests the ability to use the .json response without parsing the body
 app.use(express.json());
 
-// setup a friendly greeting for the root route
+// routes that we created for the app
 app.use('/', router);
 app.use('/api', apiRouter);
 
