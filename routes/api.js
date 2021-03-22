@@ -77,8 +77,8 @@ router.post('/users', asyncHandler(async (req, res) => {
 // creates a course, user must be signedf in do it
 router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
   try {
-    await Course.create(req.body);
-    res.status(201).location('/').json();
+    const course = await Course.create(req.body);
+    res.status(201).location(`/api/courses/${course.id}`).json();
   } catch (error) {
     const errors = error.errors.map(err => err.message);
     res.status(400).json(errors);
